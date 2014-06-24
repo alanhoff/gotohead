@@ -1,0 +1,42 @@
+{
+  "name": "gotohead",
+  "description": "Get a css snippet and put into the style tag on head of HTML document.",
+  "version": "0.1.0",
+  "homepage": "belchiorso.com.br/projetos/gotohead",
+  "author": {
+    "name": "Belchior Oliveira",
+    "email": "belchiorso@gmail.com",
+    "url": "belchiorso.com.br"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:belchior/gotohead.git"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "gotohead/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin", "performance"
+  ]
+}
