@@ -23,26 +23,44 @@ var grunt = require('grunt');
 */
 
 exports.gotohead = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
-  default_options: function(test) {
-    test.expect(1);
+   setUp: function(done) {
+      // setup here if necessary
+      done();
+   },
+   html: function(test) {
+      test.expect(1);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+      var actual = grunt.file.read('test/tmp/html.html');
+      var expected = grunt.file.read('test/expected/html/html.html');
+      test.equal(actual, expected, 'test if the content of both files are the same.');
 
-    test.done();
-  },
-  custom_options: function(test) {
-    test.expect(1);
+      test.done();
+   },
+   htmlWithoutSignature: function(test) {
+      test.expect(1);
 
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
+      var actual = grunt.file.read('test/tmp/htmlWithoutSignature.html');
+      var expected = grunt.file.read('test/expected/html/htmlWithoutSignature.html');
+      test.equal(actual, expected, 'test if the content of both files are the same without signature.');
 
-    test.done();
-  },
+      test.done();
+   },
+   jade: function(test) {
+      test.expect(1);
+
+      var actual = grunt.file.read('test/tmp/template.jade');
+      var expected = grunt.file.read('test/expected/jade/template.jade');
+      test.equal(actual, expected, 'Jade: test if the content of both files are the same.');
+
+      test.done();
+   },
+   jadeWithoutSignature: function(test) {
+      test.expect(1);
+
+      var actual = grunt.file.read('test/tmp/templateWithoutSignature.jade');
+      var expected = grunt.file.read('test/expected/jade/templateWithoutSignature.jade');
+      test.equal(actual, expected, 'Jade: test if the content of both files are the same without signature.');
+
+      test.done();
+   }
 };

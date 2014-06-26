@@ -1,6 +1,6 @@
 # gotohead
 
-> Get a css snippet and put into the style tag on head of HTML document.
+> Get css snippets and put into the style tag on head of HTML document.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -8,7 +8,7 @@ This plugin requires Grunt `~0.4.5`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install gotohead --save-dev
+npm install grunt-contrib-gotohead --save-dev
 ```
 
 Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
@@ -25,65 +25,30 @@ In your project's Gruntfile, add a section named `gotohead` to the data object p
 ```js
 grunt.initConfig({
   gotohead: {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
+     my_task: {
+        options: {
+           jadeCompatibility: false,
+           orig: 'path/to/original/html.html'
+        },
+        files: {
+           'path/to/updated/html.html': [
+              'public/css/style1.css',
+              'public/css/style2.css'
+           ]
+        }
+     }
+  }
 });
 ```
+You don't need minify your css code because it will be done automatically.
 
 ### Options
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+#### Jade compatibility
+Type: `boolean`
+Default value: `false`
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
-
-### Usage Examples
-
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
-grunt.initConfig({
-  gotohead: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  gotohead: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+Used to update your HTML template wrote with Jade Template Engine.
 
 ## Release History
 _(Nothing yet)_
