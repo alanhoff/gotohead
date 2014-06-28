@@ -49,25 +49,22 @@ module.exports = function(grunt) {
          }
 
          var template = grunt.file.read(options.orig);
-         if( template.search(/head[\s\S]*(.*)body/g) < 0 ){
+         if( template.search(/head/g) < 0 ){
             throw 'Tag head is not found in '+options.orig;
          }
 
-         var signature = 'style(data-above-the-fold="true" type="text/css").';
-         var identation = '\t';
-         if( template.search(/(\s*)style.*data-above-the-fold="true".*/i) >= 0 ){
-            var identationStyle = template.match(/(\s*)style.*data-above-the-fold="true".*/i)[1];
-            newStyle =
-               identationStyle + signature +
-               identationStyle + identation + newStyle;
-            template = template.replace(/(\s*)style.*data-above-the-fold="true".*/g, newStyle);
+         var signature = 'style(data-above-the-fold="true" type="text/css")';
+         var indent = template.match(/\n\s+head/)[0].replace(/\n/, '').replace(/\w+/, '');
+         if( template.search(/style.*data-above-the-fold="true".*/i) >= 0 ){
+            var indentStyle = template.match(/(\s*)style.*data-above-the-fold="true".*/i)[1];
+            newStyle = signature +' ' + newStyle;
+            template = template.replace(/style.*data-above-the-fold="true".*/g, newStyle);
 
          } else {
-            var identationHead = template.match(/(\s*)head/i)[1];
-            var identationBody = template.match(/(\s*)body/i)[1];
-            newStyle =          identation + signature +
-               identationHead + identation + identation + newStyle +
-               identationBody + 'body';
+            var indentHead = template.match(/(\s*)head/i)[1];
+            var indentBody = template.match(/(\s*)body/i)[1];
+            newStyle =      indent + signature + ' ' + newStyle +
+               indentBody + 'body';
             template = template.replace(/body/g, newStyle);
          }
 
@@ -102,9 +99,9 @@ module.exports = function(grunt) {
             content = content.replace(oldStyle, newStyle);
 
          } else {
-            var identationHead = content.match(/(\s*)<\/head>/i)[1];
+            var indentHead = content.match(/(\s*)<\/head>/i)[1];
             newStyle =          '   ' + newStyle +
-               identationHead + '</head>';
+               indentHead + '</head>';
             content = content.replace(/<\/head>/g, newStyle);
          }
 

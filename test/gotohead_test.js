@@ -62,5 +62,14 @@ exports.gotohead = {
       test.equal(actual, expected, 'Jade: test if the content of both files are the same without signature.');
 
       test.done();
-   }
+   },
+   jadeIndentedBySpace: function(test) {
+      test.expect(1);
+
+      var actual = grunt.file.read('test/tmp/templateIndentedBySpace.jade');
+      var expected = grunt.file.read('test/expected/jade/templateIndentedBySpace.jade');
+      test.equal(actual, expected, 'Jade: test if the content of both files are the same when code was indented by space.');
+
+      test.done();
+   },
 };

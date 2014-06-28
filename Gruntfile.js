@@ -28,7 +28,6 @@ module.exports = function(grunt) {
          tests: ['test/tmp']
       },
 
-
       // Configuration to be run (and then tested).
       gotohead: {
          html: {
@@ -78,7 +77,19 @@ module.exports = function(grunt) {
                   'test/fixtures/css2.css'
                ]
             }
-         }
+         },
+         jadeIndentedBySpace: {
+            options: {
+               jadeCompatibility: true,
+               orig: 'test/fixtures/jade/templateIndentedBySpace.jade'
+            },
+            files: {
+               'test/tmp/templateIndentedBySpace.jade': [
+                  'test/fixtures/css1.css',
+                  'test/fixtures/css2.css'
+               ]
+            }
+         },
       },
 
       // Unit tests.
