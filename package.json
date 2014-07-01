@@ -1,7 +1,7 @@
 {
    "name": "grunt-contrib-gotohead",
    "description": "Get a css snippet and put into the style tag on head of HTML document.",
-   "version": "1.0.1",
+   "version": "1.1.0",
    "homepage": "https://github.com/belchior/gotohead",
    "author": {
       "name": "Belchior Oliveira",
@@ -18,7 +18,7 @@
    "licenses": [
       {
          "type": "MIT",
-         "url": "gotohead/blob/master/LICENSE-MIT"
+         "url": "https://github.com/belchior/gotohead/blob/master/LICENSE-MIT"
       }
    ],
    "engines": {
@@ -28,7 +28,8 @@
       "test": "grunt test"
    },
    "dependencies":{
-      "clean-css": "~2.x"
+      "clean-css": "~2.x",
+      "uglify-js": "~2.x"
    },
    "devDependencies": {
       "grunt-contrib-jshint": "^0.9.2",

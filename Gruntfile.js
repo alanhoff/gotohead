@@ -1,6 +1,6 @@
 /*
  * gotohead
- * gotohead
+ * Get a css snippet and put into the style tag on head of HTML document.
  *
  * Copyright (c) 2014 Belchior Oliveira
  * Licensed under the MIT license.
@@ -32,63 +32,57 @@ module.exports = function(grunt) {
       gotohead: {
          html: {
             options: {
-               jadeCompatibility: false,
-               orig: 'test/fixtures/html/html.html'
+               jade: false,
+               type: 'css'
             },
-            files: {
-               'test/tmp/html.html': [
-                  'test/fixtures/css1.css',
-                  'test/fixtures/css2.css'
-               ]
-            }
-         },
-         htmlWithoutSignature: {
-            options: {
-               jadeCompatibility: false,
-               orig: 'test/fixtures/html/htmlWithoutSignature.html'
-            },
-            files: {
-               'test/tmp/htmlWithoutSignature.html': [
-                  'test/fixtures/css1.css',
-                  'test/fixtures/css2.css'
-               ]
-            }
+            files: [
+               {
+                  orig: 'test/fixtures/html/html.html',
+                  dest: 'test/tmp/html.html',
+                  src: ['test/fixtures/css/css1.css', 'test/fixtures/css/css2.css']
+               },
+               {
+                  orig: 'test/fixtures/html/htmlWithoutSignature.html',
+                  dest: 'test/tmp/htmlWithoutSignature.html',
+                  src: ['test/fixtures/css/css1.css', 'test/fixtures/css/css2.css']
+               }
+            ]
          },
          jade: {
             options: {
-               jadeCompatibility: true,
-               orig: 'test/fixtures/jade/template.jade'
+               jade: true,
+               type: 'css'
             },
-            files: {
-               'test/tmp/template.jade': [
-                  'test/fixtures/css1.css',
-                  'test/fixtures/css2.css'
-               ]
-            }
+            files: [
+               {
+                  orig: 'test/fixtures/jade/template.jade',
+                  dest: 'test/tmp/template.jade',
+                  src: ['test/fixtures/css/css1.css', 'test/fixtures/css/css2.css']
+               },
+               {
+                  orig: 'test/fixtures/jade/templateWithoutSignature.jade',
+                  dest: 'test/tmp/templateWithoutSignature.jade',
+                  src: ['test/fixtures/css/css1.css', 'test/fixtures/css/css2.css']
+               },
+               {
+                  orig: 'test/fixtures/jade/templateIndentedBySpace.jade',
+                  dest: 'test/tmp/templateIndentedBySpace.jade',
+                  src: ['test/fixtures/css/css1.css', 'test/fixtures/css/css2.css']
+               },
+            ]
          },
-         jadeWithoutSignature: {
+         javascript: {
             options: {
-               jadeCompatibility: true,
-               orig: 'test/fixtures/jade/templateWithoutSignature.jade'
+               jade: false,
+               type: 'js'
             },
-            files: {
-               'test/tmp/templateWithoutSignature.jade': [
-                  'test/fixtures/css1.css',
-                  'test/fixtures/css2.css'
-               ]
-            }
-         },
-         jadeIndentedBySpace: {
-            options: {
-               jadeCompatibility: true,
-               orig: 'test/fixtures/jade/templateIndentedBySpace.jade'
-            },
-            files: {
-               'test/tmp/templateIndentedBySpace.jade': [
-                  'test/fixtures/css1.css',
-                  'test/fixtures/css2.css'
-               ]
-            }
+            files: [
+               {
+                  orig: 'test/fixtures/html/htmlWithJavascript.html',
+                  dest: 'test/tmp/htmlWithJavascript.html',
+                  src: ['test/fixtures/js/script1.js', 'test/fixtures/js/script2.js']
+               }
+            ]
          },
       },
 
@@ -113,5 +107,6 @@ module.exports = function(grunt) {
 
    // By default, lint and run all tests.
    grunt.registerTask('default', ['jshint', 'test']);
+   // grunt.registerTask('default', ['gotohead']);
 
 };

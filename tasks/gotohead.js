@@ -8,6 +8,7 @@
 
 'use strict';
 var CleanCSS = require('clean-css');
+var UglifyJS = require("uglify-js");
 
 module.exports = function(grunt) {
 
@@ -21,7 +22,7 @@ module.exports = function(grunt) {
       // Iterate over all specified file groups.
       this.files.forEach(function(f) {
          // Concat specified files.
-         var style = f.src.filter(function(filepath) {
+         var src = f.src.filter(function(filepath) {
             // Warn on and remove invalid source files (if nonull was set).
             if (!grunt.file.exists(filepath)) {
                grunt.log.warn('Source file "' + filepath + '" not found.');
@@ -31,48 +32,103 @@ module.exports = function(grunt) {
             }
          }).map(function(filepath) {
             var source = grunt.file.read(filepath);
-            return new CleanCSS().minify(source);
-         }).join('');
+            if( options.type === 'css' ){
+               return new CleanCSS().minify(source);
 
-         return goToHead(options, f.dest, style);
+            } else if( options.type === 'js' ){
+               return UglifyJS.minify(source, {fromString: true}).code;
+            }
+         }).join('');
+         return goToHead(f.orig, src, options);
       });
    });
 
-   function goToHead(options, dest, newStyle){
-      return options.jadeCompatibility ? jade(options, dest, newStyle) : html(options, dest, newStyle);
+   function goToHead(file, source, options){
+      return options.jade ? jade(file, source, options) : html(file, source, options);
    }
 
-   function jade(options, dest, newStyle){
+   function html(file, source, options){
       try{
-         if( !grunt.file.exists(options.orig) ){
-            throw 'Source file "' + options.orig + '" not found.';
+         if( !grunt.file.exists(file.orig) ){
+            throw 'Source file "' + file.orig + '" not found.';
          }
 
-         var template = grunt.file.read(options.orig);
+         var content = grunt.file.read(file.orig);
+         if( content.search(/<head>[\s\S]*(.*?)<\/head>/g) < 0 ){
+            throw 'Tag HEAD is not found in '+file.orig;
+         }
+
+         var type;
+         if( options.type === 'css' ){
+            type = 'style';
+         } else if( options.type === 'js' ){
+            type = 'script';
+         }
+
+         var signature = '<'+type+' data-above-the-fold="true">';
+         source = signature + source + '</'+type+'>';
+
+         if( content.search(signature) >= 0 ){
+            var oldStyle = content.match(new RegExp(signature+'[\\s\\S]*(.*?)<\\/'+type+'>', 'g'))[0];
+            content = content.replace(oldStyle, source);
+
+         } else {
+            var indentHead = content.match(/(\s*)<\/head>/i)[1];
+            source = '   ' + source + indentHead + '</head>';
+            content = content.replace(/<\/head>/g, source);
+         }
+
+         // Write the destination file.
+         grunt.file.write(file.dest, content);
+
+         // Print a success message.
+         grunt.log.ok('File: '+file.dest+' was updated');
+         return true;
+
+      } catch(msg){
+         var err = new Error(msg);
+         grunt.fail.warn(err);
+         return false;
+      }
+   }
+
+   function jade(file, source, options){
+      try{
+         if( !grunt.file.exists(file.orig) ){
+            throw 'Source file "' + file.orig + '" not found.';
+         }
+
+         var template = grunt.file.read(file.orig);
          if( template.search(/head/g) < 0 ){
-            throw 'Tag head is not found in '+options.orig;
+            throw 'Tag HEAD is not found in '+file.orig;
          }
 
-         var signature = 'style(data-above-the-fold="true" type="text/css")';
+         var type;
+         if( options.type === 'css' ){
+            type = 'style';
+         } else if( options.type === 'js' ){
+            type = 'script';
+         }
+
+         var signature = type+'(data-above-the-fold="true")';
          var indent = template.match(/\n\s+head/)[0].replace(/\n/, '').replace(/\w+/, '');
-         if( template.search(/style.*data-above-the-fold="true".*/i) >= 0 ){
-            var indentStyle = template.match(/(\s*)style.*data-above-the-fold="true".*/i)[1];
-            newStyle = signature +' ' + newStyle;
-            template = template.replace(/style.*data-above-the-fold="true".*/g, newStyle);
+         if( template.search(new RegExp(type +'.*data-above-the-fold="true".*','g')) >= 0 ){
+            var indentStyle = template.match(new RegExp(type +'.*data-above-the-fold="true".*','i'))[1];
+            source = signature +' ' + source;
+            template = template.replace(new RegExp(type +'.*data-above-the-fold="true".*','g'), source);
 
          } else {
             var indentHead = template.match(/(\s*)head/i)[1];
             var indentBody = template.match(/(\s*)body/i)[1];
-            newStyle =      indent + signature + ' ' + newStyle +
-               indentBody + 'body';
-            template = template.replace(/body/g, newStyle);
+            source = indent + signature + ' ' + source + indentBody + 'body';
+            template = template.replace(/body/g, source);
          }
 
          // Write the destination file.
-         grunt.file.write(dest, template);
+         grunt.file.write(file.dest, template);
 
          // Print a success message.
-         grunt.log.writeln('File: '+dest+' was updated');
+         grunt.log.ok('File: '+file.dest+' was updated');
          return true;
 
       } catch(msg){
@@ -81,42 +137,4 @@ module.exports = function(grunt) {
          return false;
       }
    }
-   function html(options, dest, newStyle){
-      try{
-         if( !grunt.file.exists(options.orig) ){
-            throw 'Source file "' + options.orig + '" not found.';
-         }
-
-         var content = grunt.file.read(options.orig);
-         if( content.search(/<head>[\s\S]*(.*?)<\/head>/g) < 0 ){
-            throw 'Tag head is not found in '+options.orig;
-         }
-         var signature = '<style data-above-the-fold="true" type="text/css">';
-         newStyle = signature + newStyle + '</style>';
-
-         if( content.search(signature) >= 0 ){
-            var oldStyle = content.match(new RegExp(signature+'[\\s\\S]*(.*?)<\\/style>', 'g'))[0];
-            content = content.replace(oldStyle, newStyle);
-
-         } else {
-            var indentHead = content.match(/(\s*)<\/head>/i)[1];
-            newStyle =          '   ' + newStyle +
-               indentHead + '</head>';
-            content = content.replace(/<\/head>/g, newStyle);
-         }
-
-         // Write the destination file.
-         grunt.file.write(dest, content);
-
-         // Print a success message.
-         grunt.log.writeln('File: '+dest+' was updated');
-         return true;
-
-      } catch(msg){
-         var err = new Error(msg);
-         grunt.fail.warn(err);
-         return false;
-      }
-   }
-
 };

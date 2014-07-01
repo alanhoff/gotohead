@@ -1,6 +1,11 @@
-# gotohead
+# Vá para a HEAD
 
-> Get css snippets and put into the style tag on head of HTML document.
+> Coloca na HEAD de um documento HTML trechos de códigos CSS ou Javascript.
+
+Você que se preocupa com performance nos websites que desenvolve, certamente se preocupa em minificar seu CSS e Javascript, provavelmente você otimiza as imagens que serão exibidas, mas e a renderizão de tudo isso nos browsers você se importa?
+Este plugin para Grunt quer ajudar você nessa tarefa.
+
+Ao separar o código dos [elementos acima da borda](https://developers.google.com/speed/docs/insights/PrioritizeVisibleContent) dos demais é possível otimizar a velocidade de renderizão da página, obtendo assim um ganho de performance.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -25,30 +30,36 @@ In your project's Gruntfile, add a section named `gotohead` to the data object p
 ```js
 grunt.initConfig({
   gotohead: {
-     my_task: {
-        options: {
-           jadeCompatibility: false,
-           orig: 'path/to/original/html.html'
-        },
-        files: {
-           'path/to/updated/html.html': [
-              'public/css/style1.css',
-              'public/css/style2.css'
-           ]
-        }
-     }
+    my_task: {
+      options: {
+        jade: false,
+        type: 'css'
+      },
+      files: [
+        { orig: 'path/to/original/html.html',
+          dest: 'path/to/updated/html.html',
+          src: [ 'public/css/style1.css', 'public/css/style2.css' ] }
+      ]
+    }
   }
 });
 ```
-You don't need minify your css code because it will be done automatically.
+You don't need minify your code because it will be done automatically.
 
 ### Options
 
-#### Jade compatibility
+#### Jade
 Type: `boolean`
 Default value: `false`
 
 Used to update your HTML template wrote with Jade Template Engine.
 
-## Release History
-_(Nothing yet)_
+#### Type
+Type: `string`
+
+Used to determine what type of file is.
+
+Values                     | Description
+---------------------------|---------------------------------------------------------
+css                        | Default value. For css code.
+js                         | For Javascript code.
