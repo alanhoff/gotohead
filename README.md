@@ -1,6 +1,6 @@
-# Vá para a HEAD
+# Go to HEAD
 
-> Coloca na HEAD de um documento HTML trechos de códigos CSS ou Javascript.
+> Put into the HEAD of a HTML document snippets of code CSS or Javascript.
 
 Você que se preocupa com performance nos websites que desenvolve, certamente se preocupa em minificar seu CSS e Javascript, provavelmente você otimiza as imagens que serão exibidas, mas e a renderizão de tudo isso nos browsers você se importa?
 Este plugin para Grunt quer ajudar você nessa tarefa.
