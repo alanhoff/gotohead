@@ -2,10 +2,9 @@
 
 > Put into the HEAD of a HTML document snippets of code CSS or Javascript.
 
-Você que se preocupa com performance nos websites que desenvolve, certamente se preocupa em minificar seu CSS e Javascript, provavelmente você otimiza as imagens que serão exibidas, mas e a renderizão de tudo isso nos browsers você se importa?
-Este plugin para Grunt quer ajudar você nessa tarefa.
+If you care about your website performance, you surely care about CSS and JavaScript minification, probably image optimization too, but what about the rendering of all this, do you care? This Grunt plugin was made to help you with that.
 
-Ao separar o código dos [elementos acima da borda](https://developers.google.com/speed/docs/insights/PrioritizeVisibleContent) dos demais é possível otimizar a velocidade de renderizão da página, obtendo assim um ganho de performance.
+When we separate the code of the [visible content](https://developers.google.com/speed/docs/insights/PrioritizeVisibleContent) from the other it's possible to optimize the speed of rendering of the page, obtaining a gain in the overall performance.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
